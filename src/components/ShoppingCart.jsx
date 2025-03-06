@@ -1,8 +1,25 @@
 import { ShoppingCartIcon, XIcon } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useCart } from "../context/cartContext"
+import CartItem from "./CartItem"
+import { formatCurrency } from "../utilities/formatCurrency"
 
 const ShoppingCart = () => {
     const[isOpen, setIsOpen] = useState(false);
+    const [cartItems, setCartItems] = useState([]);
+    const[totalPrice, setTotalPrice] = useState(0);
+
+    const { allItems } = useCart();
+
+    useEffect(()=>{
+       const inCartItems = allItems.filter((item)=>item.inCart)
+       setCartItems(inCartItems?.reverse());
+
+       const price = inCartItems.reduce((acc, item)=>{
+            return (acc + item.price * item.quantity)
+    }, 0);
+       setTotalPrice(price);
+    }, [allItems])
   return (
   <>
     <div className={`w-[300px] h-screen bg-gray-200 fixed top-0 z-30 border-l-4 border-red-200 rounded-tl-lg ${isOpen ? 'right-0' : 'right-[-300px]'}`}>
@@ -22,9 +39,13 @@ const ShoppingCart = () => {
                 1
             </span>
         </button>
-        <div className="h-screen flex flex-col gap-y-3 overflow-y-scroll px-5 pb-24 pt-20"> </div>
+        <div className="h-screen flex flex-col gap-y-3 overflow-y-scroll px-5 pb-24 pt-20">
+            {cartItems?.map((item)=>{
+                return <CartItem key={item.id} item={item} fromCart={true}/>
+            })}
+        </div>
         <div className="w-full h-20 bg-white absolute bottom-0 left-0 z-10 grid place-items-center border rounded-lg">
-            <h1 className="text-xl text-gray-600">Total: $155</h1>
+            <h1 className="text-xl text-gray-600">Total: {formatCurrency(totalPrice)}</h1>
             <button className="rounde-md bg-blue-300 px-2 text-white hover:bg-blue-400 transition-colors">Buy Now</button>
         </div>
     </div>
