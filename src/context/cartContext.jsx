@@ -28,7 +28,15 @@ const removeFromCart =(item)=>{
     })
 }
 
-return <CartContext.Provider value={{allItems, setItems, addToCart, removeFromCart}}>
+const updateQuantity =(cartItem, amount)=>{
+    setAllItems((prevItems)=>{
+        return prevItems.map((item)=>{
+            return item.id === cartItem.id ? {...item, quantity: item.quantity + amount} : item;
+        })
+    })
+}
+
+return <CartContext.Provider value={{allItems, setItems, addToCart, removeFromCart, updateQuantity}}>
     {children}
     </CartContext.Provider>;
 }
