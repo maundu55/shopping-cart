@@ -26,10 +26,14 @@ const CartButton = ({item}) => {
                         -
                         </button>
                         <p className='flex items-center gap-x-1 mx-1'>
-                            <span className='min-w-7 bg-green-100 grid place-items-center border rounded-full'>1</span>
+                            <span className='min-w-7 bg-green-100 grid place-items-center border rounded-full'>{item.quantity}</span>
                             <span className='text-xs'>in cart</span>
                         </p>
-                        <button className='border roudned-lg px-3'>+
+                        <button 
+                        className='border roudned-lg px-3'
+                        onClick={()=>updateQuantity(item, 1)}
+                        >
+                        +
                         </button>
                     </div>
                     <button className='bg-pink-300 mx-auto mt-2 block rounded-md px-2 py-1 text-sm text-white hover:bg-pink-400 transiton-colors'
