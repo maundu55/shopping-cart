@@ -44,9 +44,23 @@ const setLocalStorage =()=>{
     }
 }
 
-return <CartContext.Provider value={{allItems, setItems, addToCart, removeFromCart, updateQuantity, setLocalStorage}}>
+const setCartItemsFromStorage=()=>{
+    if(getItemFromStorage('cartItems') !== null){
+     const storageItems = getParsedItemFromStorage('cartItems');
+     setAllItems((prevItems)=>{
+         return prevItems.map((item)=>{
+            const matchedItem = storageItems.find((storageItem)=> storageItem.id === item.id)
+            return matchedItem ? matchedItem : item;  
+         })
+        })
+}
+}
+
+return (
+
+<CartContext.Provider value={{allItems, setItems, addToCart, removeFromCart, updateQuantity, setLocalStorage, setCartItemsFromStorage}}>
     {children}
-    </CartContext.Provider>;
+    </CartContext.Provider>);
 }
 
 export const useCart = () => {
